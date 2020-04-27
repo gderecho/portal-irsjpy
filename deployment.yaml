@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: irsjpy-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: irsjpy-portal
+  template:
+    metadata:
+      labels:
+        app: irsjpy-portal
+    spec:
+      containers:
+        - name: irsjpy-portal
+          image: <IMAGE>
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 80
+          env:
+            - name: APPID_SERVER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: appid
+                  key: server-url
+            - name: IRSJPY_PORTAL_PORT
+              value: "80"
+      imagePullSecrets:
+        - name: github
