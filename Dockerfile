@@ -1,4 +1,4 @@
-ARG IRSJPY_PORTAL_PORT
+ARG IRSJPY_PORTAL_PORT=80
 FROM node:13.10.1 as build-stage
 WORKDIR /app
 COPY package*.json /app/
