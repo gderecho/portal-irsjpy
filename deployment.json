@@ -1,53 +1,83 @@
 {
-    "apiVersion": "apps/v1",
-    "kind": "Deployment",
-    "metadata": {
-        "name": "irsjpy-portal",
-        "namespace": "<NAMESPACE>"
-    },
-    "spec": {
-        "replicas": 3,
-        "selector": {
-            "matchLabels": {
-                "app": "irsjpy-portal"
-            }
-        },
-        "template": {
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
             "metadata": {
-                "labels": {
-                    "app": "irsjpy-portal"
-                }
+                "name": "irsjpy-portal",
+                "namespace": "<NAMESPACE>"
             },
             "spec": {
-                "containers": [{
-                    "name": "irsjpy-portal",
-                    "image": "<IMAGE>",
-                    "imagePullPolicy": "Always",
-                    "ports": [
-                        {
-                            "containerPort": 80
+                "replicas": 3,
+                "selector": {
+                    "matchLabels": {
+                        "app": "irsjpy-portal"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "app": "irsjpy-portal"
                         }
-                    ],
-                    "env": [
-                        {
-                            "name": "APPID_SERVER_URL",
-                            "valueFrom": {
-                                "secretKeyRef": {
-                                    "name": "appid",
-                                    "key": "server-url"
+                    },
+                    "spec": {
+                        "containers": [{
+                            "name": "irsjpy-portal",
+                            "image": "<IMAGE>",
+                            "imagePullPolicy": "Always",
+                            "ports": [
+                                {
+                                    "containerPort": 80
                                 }
-                            }
-                        },
-                        {
-                            "name": "IRSJPY_PORTAL_PORT",
-                            "value": "80"
-                        }
-                    ]
-                }],
-                "imagePullSecrets": [{
-                    "name": "github"
-                }]
+                            ],
+                            "env": [
+                                {
+                                    "name": "APPID_SERVER_URL",
+                                    "valueFrom": {
+                                        "secretKeyRef": {
+                                            "name": "appid",
+                                            "key": "server-url"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "IRSJPY_PORTAL_PORT",
+                                    "value": "80"
+                                }
+                            ]
+                        }],
+                        "imagePullSecrets": [{
+                            "name": "github"
+                        }]
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "name": "irsjpy-portal",
+                "namespace": "<NAMESPACE>"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "port": 80,
+                        "protocol": "TCP",
+                        "targetPort": 80
+                    }
+                ],
+                "selector": {
+                    "app": "irsjpy-portal"
+                }
             }
         }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
     }
 }
